@@ -31,7 +31,7 @@ You may execute this code within a development environment such as [RStudio](htt
 
 ## Presentation
 
-The presentation given by Danny Toomey outlining the methodology used for this work is provided in both [Powerpoint](Supplementary Material - Protocol.pptx) and [PDF](Supplementary Material - Protocol.pdf) format.
+The presentation given by Danny Toomey outlining the methodology used for this work is provided in both [Powerpoint](Supplementary%20Material%20-%20Protocol.pptx) and [PDF](Supplementary%20Material%20-%20Protocol.pdf) format.
 
 ## Repository Contact
 
