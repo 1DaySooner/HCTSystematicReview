@@ -1,5 +1,7 @@
 # A Systematic Review of Human Challenge Trials, Designs, and Safety.
 
+medRxiv preprint doi: [https://doi.org/10.1101/2022.03.20.22272658](https://doi.org/10.1101/2022.03.20.22272658)
+
 ## Dataset
 
 The resulting dataset from this systematic review is provided both as an [Excel file](dataset.xlsm) and a [Google Sheet](https://bit.ly/1DSSR22).  These datasets allow filtering for various exclusions:
