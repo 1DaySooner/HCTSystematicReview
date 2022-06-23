@@ -1,6 +1,7 @@
 # A Systematic Review of Human Challenge Trials, Designs, and Safety.
 
-medRxiv preprint doi: [https://doi.org/10.1101/2022.03.20.22272658](https://doi.org/10.1101/2022.03.20.22272658)
+medRxiv preprint DOI: [https://doi.org/10.1101/2022.03.20.22272658](https://doi.org/10.1101/2022.03.20.22272658)
+Dataset DOI: 10.5281/zenodo.6660257
 
 ## Dataset
 
@@ -20,15 +21,17 @@ The resulting dataset from this systematic review is provided both as an [Excel 
 
 The figures included for publication were produced directly from the Google Sheet (https://bit.ly/1DSSR22) and the source code is provided in [CID-113513.r](CID-113513.r).  This was developend and tested under [R](https://www.r-project.org/) 4.1.3.
 
-You may execute this code within a development environment such as [RStudio](https://www.rstudio.com/), or simply from the R interpreter by issuing the command `Rscript CID-113513.r`.  In the latter environment, the program will produce and EPS and TIF version of each figure in the publication.
+You may execute this code within a development environment such as [RStudio](https://www.rstudio.com/), or simply from the R interpreter by issuing the command `Rscript CID-113513.r`.  In the latter environment, the program will produce and EPS and TIF (1200dpi) version of each figure in the publication.
 
 ```
-06/17/2022  01:47 PM            11,432 CID-113513-Figure1.eps
-06/17/2022  01:47 PM            71,860 CID-113513-Figure1.tiff
-06/17/2022  01:47 PM            19,562 CID-113513-Figure2a.eps
-06/17/2022  01:47 PM            79,474 CID-113513-Figure2a.tiff
-06/17/2022  01:47 PM            34,759 CID-113513-Figure2b.eps
-06/17/2022  01:47 PM            48,652 CID-113513-Figure2b.tiff
+06/23/2022  11:03 AM            11,547 CID-113513-figure2.eps
+06/23/2022  11:03 AM           474,900 CID-113513-figure2.tiff
+06/23/2022  11:03 AM            11,552 CID-113513-figure3.eps
+06/23/2022  11:03 AM           883,650 CID-113513-figure3.tiff
+06/23/2022  11:03 AM            34,883 CID-113513-figure3a.eps
+06/23/2022  11:03 AM           463,836 CID-113513-figure3a.tiff
+06/23/2022  11:03 AM            11,547 CID-113513-figure3b.eps
+06/23/2022  11:03 AM           346,146 CID-113513-figure3b.tiff
 ```
 
 ## Presentation
