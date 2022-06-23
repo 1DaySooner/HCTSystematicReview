@@ -1,7 +1,8 @@
 # A Systematic Review of Human Challenge Trials, Designs, and Safety.
 
 medRxiv preprint DOI: [https://doi.org/10.1101/2022.03.20.22272658](https://doi.org/10.1101/2022.03.20.22272658)
-Dataset DOI: 10.5281/zenodo.6660257
+
+Dataset DOI: [10.5281/zenodo.6660257](https://zenodo.org/record/6660257)
 
 ## Dataset
 
