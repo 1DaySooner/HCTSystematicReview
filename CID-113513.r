@@ -1,14 +1,16 @@
-# cid2.r - plot for Systematic Review Table 3
+# CID-113513.r - plot for Systematic Review Figures 2 and 3
+#   Tested with R 4.1.3
 #
-# Read from Google Sheet, assume location does not change, sheet name does not change, and positioning
-# of data within that sheet remains as is.
-#
+# Read from Google Sheet dataset at https://bit.ly/1DSSR22
+#   
 # 23 February 2022  JW prepare for pre-print
 # 16 June 2022      JW adopt to final published dataset
+# 22 June 2022	    JW shift figure numbers, update layout for CID
 
 # call required libraries for this ggplot
 
 library(ggplot2)
+library(gridExtra)
 library(googlesheets4)
 library(tidyr)
 library(dplyr,warn.conflicts = FALSE)
@@ -21,6 +23,7 @@ library(ggrepel)
 # if run in development mode, don't save to file
 
 development <- Sys.getenv("RSTUDIO") == "1"
+#ps.options(colormodel="cmyk")
 
 # Location of Google Sheets dataset, with relevant sheet for this figure
 
@@ -70,17 +73,17 @@ grf3s <- subset(grf3s, select = -c(col3,col4,col5,col6,col7,col9,col11,col13,col
 grf3s.cum <-melt(grf3s, id.vars = c("Decade","Studies","nodefineAE","unclearAE","nodataAE","nomentionSAE","registered","nodataSAE"))
 
 
-# Build Figure 1.  Decade on independent axis, participants quantity on dependent axis, by SAE and non-SAE
+# Build Figure 2.  Decade on independent axis, participants quantity on dependent axis, by SAE and non-SAE
 
-figure1 <- ggplot(grf3s.cum,aes(variable,value,fill=Decade))
+figure2 <- ggplot(grf3s.cum,aes(variable,value,fill=Decade))
 
 # side-by-side bars per decate, give bars a highlight
 
-figure1 <- figure1 + geom_bar(position="dodge", stat="identity",color="gray")
+figure2 <- figure2 + geom_bar(position="dodge", stat="identity",color="gray")
 
 # label bars with quantity, need to use "dodge" type for positioning, place value over top of bar
 
-figure1 <- figure1 + geom_col(position = "dodge") +
+figure2 <- figure2 + geom_col(position = "dodge") +
   geom_text(
     aes(label = value),
     color = "black", size = 2,
@@ -88,15 +91,15 @@ figure1 <- figure1 + geom_col(position = "dodge") +
 
 # title the plot
 
-figure1 <- figure1 + ggtitle("Data Reporting and Database Registration in Published HCTs")
+figure2 <- figure2 + ggtitle("Data Reporting and Database Registration in Published HCTs")
 
 # label axes and legend
 
-figure1 <- figure1 + labs(x = "", y = "% of Studies")
+figure2 <- figure2 + labs(x = "", y = "% of Studies")
 
 # x category labels
 
-figure1 <- figure1 +
+figure2 <- figure2 +
   scale_x_discrete(
     labels=c('nodefineAEp' = 'AE undefined',
              'unclearAEp' = 'AE unclear',
@@ -109,7 +112,7 @@ figure1 <- figure1 +
 
 # adjust title position, fonts and grid theme
 
-figure1 <- figure1 + theme(
+figure2 <- figure2 + theme(
   text = element_text(size = 10),
   plot.title.position = 'plot',
   plot.title = element_text(hjust = 0.5),
@@ -125,30 +128,31 @@ figure1 <- figure1 + theme(
 
 # set fill color scheme and labels
 
-figure1 <- figure1 + scale_fill_brewer(palette = "Blues")
-figure1 <- figure1 + scale_y_continuous(labels = label_percent(scale = 1))
+figure2 <- figure2 + scale_fill_brewer(palette = "Blues")
+figure2 <- figure2 + scale_y_continuous(labels = label_percent(scale = 1))
 
 # now make a final split by decade
 
-figure1 <- figure1 + theme(axis.text.x = element_text(angle = 45, vjust = 1.0, hjust=1))
-figure1 <- figure1 + facet_wrap(~Decade, nrow=3)
-figure1 <- figure1 + theme(legend.position = "none")
+figure2 <- figure2 + theme(axis.text.x = element_text(angle = 45, vjust = 1.0, hjust=1))
+figure2 <- figure2 + facet_wrap(~Decade, nrow=3)
+figure2 <- figure2 + theme(legend.position = "none")
 
-# create Figure 2 plots
+# create Figure 3 plots
 
 grf1 <- read_sheet(google_workbook, range="Figure2aData")
 grf1s <- grf1 %>% pivot_longer(!`Pathogen category`,names_to="decade",values_to="studies")
 ylabel <- range_read_cells(google_workbook, range="Figure2aStudies")
 
-figure2a <- ggplot(grf1s,aes(x=reorder(`Pathogen category`,desc(studies), sum), y=studies, fill=decade)) +
+figure3a <- ggplot(grf1s,aes(x=reorder(`Pathogen category`,desc(studies), sum), y=studies, fill=decade)) +
   geom_bar(position="stack", stat="identity",color="gray") +
-  ggtitle("Studies by Pathogen") +
+  ggtitle("Studies by Pathogen", subtitle="Figure 3A") +
   theme(axis.text.x = element_text(angle = 60, vjust = 1.0, hjust=1)) +
   labs(x = NULL, y = paste("Number of Studies ",ylabel$cell[[1]]$effectiveValue),fill="Decade/Era") +
   geom_col(position = position_stack(reverse = TRUE)) +
   theme(text = element_text(size = 10),
         plot.title.position = 'plot',
         plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
         legend.position = c(0.86, 0.75),
         panel.grid.minor.y = element_blank(),
         panel.grid.major.x = element_blank(),
@@ -157,7 +161,7 @@ figure2a <- ggplot(grf1s,aes(x=reorder(`Pathogen category`,desc(studies), sum), 
                                           linetype = 1)) +
   scale_fill_brewer(palette = "Greens")
 
-# Plot for Systematic Review Graphic 2b
+# Plot for Systematic Review Graphic 3b
 #
 # 28 February 2022 JW 1DS Research Team
 
@@ -175,26 +179,27 @@ names(grf2a)[3] <- "AEs"
 grf2a.cum <- melt(grf2a, id.vars = c("Era"), measure.vars = c("Registered","Unregistered"))
 class(grf2a.cum$value) = "double" 
 
-figure2b <- ggplot(grf2a.cum,aes(Era,value,fill=variable))
+figure3b <- ggplot(grf2a.cum,aes(Era,value,fill=variable))
 
 # side-by-side bars per decade, give bars a highlight
 
-figure2b <- figure2b + geom_bar(position="dodge", stat="identity",color="gray")
+figure3b <- figure3b + geom_bar(position="dodge", stat="identity",color="gray")
 
 # title the plot
 
-figure2b <- figure2b + ggtitle("Data Reporting and Database Registration in Published HCTs")
+figure3b <- figure3b + ggtitle("Data Reporting and Database Registration in Published HCTs", subtitle="Figure 3B")
 
 # label axes and legend
 
-figure2b <- figure2b + labs(x = "Year", y = "Studies", fill = "")
+figure3b <- figure3b + labs(x = "Year", y = "Studies", fill = "")
 
 # adjust title position, fonts and grid theme
 
-figure2b <- figure2b + theme(
+figure3b <- figure3b + theme(
   text = element_text(size = 10),
   plot.title.position = 'plot',
   plot.title = element_text(hjust = 0.5),
+  plot.subtitle = element_text(hjust = 0.5),
   axis.title.y = element_text(margin = margin(r = 0)),
   legend.position = c(0.91, 0.795),
   panel.grid.minor.y = element_blank(),
@@ -206,37 +211,45 @@ figure2b <- figure2b + theme(
 
 # set fill color scheme and labels
 
-figure2b <- figure2b + scale_fill_brewer(palette = "Set1", labels=c("Registered", "Unregistered"))
-figure2b <- figure2b + theme(axis.text.x = element_text(angle = 45, vjust = 1.0, hjust=1))
-figure2b <- figure2b + theme(legend.position = "top")
+figure3b <- figure3b + scale_fill_brewer(palette = "Set1", labels=c("Registered", "Unregistered"))
+figure3b <- figure3b + theme(axis.text.x = element_text(angle = 45, vjust = 1.0, hjust=1))
+figure3b <- figure3b + theme(legend.position = "top")
 
 #
 #
 #
 
 if (!development) {
-  ggsave(file = "CID-113513-Figure1.eps") 
-  print("Generating TIFF")
-  tiff("CID-113513-Figure1.tiff", units="in", width=5, height=5, res=300, compression="zip")
+  tiff("CID-113513-figure2.tiff", units="in", width=5, height=5, res=1200, compression="zip")
 }
 
-figure1
+#figure2
+grid.arrange(figure2, ncol=1, top = "Figure 2")
 
 if (!development) {
-  ggsave(file = "CID-113513-Figure2a.eps") 
-  print("Generating TIFF")
-  tiff("CID-113513-Figure2a.tiff", units="in", width=5, height=5, res=300, compression="zip")
+  ggsave(file = "CID-113513-figure2.eps") 
+  tiff("CID-113513-figure3a.tiff", units="in", width=5, height=5, res=1200, compression="zip")
 }
 
-figure2a
+figure3a
 
 if (!development) {
-  ggsave(file = "CID-113513-Figure2b.eps") 
-  print("Generating TIFF")
-  tiff("CID-113513-Figure2b.tiff", units="in", width=5, height=5, res=300, compression="zip")  
+  ggsave(file = "CID-113513-figure3a.eps") 
+  tiff("CID-113513-figure3b.tiff", units="in", width=5, height=5, res=1200, compression="zip")  
 }
 
-figure2b
+figure3b
+
+if (!development) {
+  ggsave(file = "CID-113513-figure3b.eps") 
+  tiff("CID-113513-figure3.tiff", units="in", width=10, height=5, res=1200, compression="zip")  
+}
+
+grid.arrange(figure3a, figure3b, ncol=2, top = "Figure 3")
+
+if (!development) {
+  ggsave(file = "CID-113513-figure3.eps") 
+}
 
 if (!development) {
   dev.off()
